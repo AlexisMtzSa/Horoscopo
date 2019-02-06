@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="estilo_index.css">
+    <link rel="shortcut icon" href="img/logo/logo.png">
+    <title>Tu Horoscopo Del Dia</title>
+</head>
+<body>
+    <style type="text/css">
+        html{ 
+            background: url(img/fondo/fondo.jpg) no-repeat center center fixed; 
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;  
+        }        
+    </style>
+   <nav><h1>BIENVENIDO A: tuhoroscopodeldia.com</h1></nav>
+    <form>
+        <div>
+            <label id="nombre1">Ingresa tu nombre:</label>
+            <input id="nombre2" name="username" required>
+        </div>
+        <div>
+            <label id="fecha1">Indica tu fecha de nacimiento:</label>
+            <input id="fecha2" name="birhday" type="date" required>
+        </div>
+        <div>
+            <label id="genero1">Selecciona tu género:</label>
+            <label id="h"><input type="radio" name="gender" required>Hombre</label>
+            <label id="m"><input type="radio" name="gender" required>Mujer</label>
+        </div>
+
+        <dialog id="modal">
+            <h3 id="hola">HOLA</h3>
+            <h3 id="nom">ANONYMOUS</h3>
+            <b><p id="tienes">TU EDAD AUN ES DESCONOCIDA</p></b> 
+            <b><p id="tu-signo">TU SIGNO AUN ES DESCONOCIDO</p></b> 
+            <a href="tuHoroscopo.html" id="cerrar">Aceptar</a>
+            <a href="#" id="cerrarX">Cancelar</a>
+        </dialog>
+        <input type="button" id="boton" onclick="javascript:calcularEdad();" value="ENVIAR">
+
+        <script>
+            const modal = document.getElementById('modal');
+            const boton = document.getElementById('boton');
+            const close = document.getElementById('cerrar');
+            const closeX = document.getElementById('cerrarX');
+            close.addEventListener('click' , () => {modal.removeAttribute('open')} )
+            closeX.addEventListener('click' , () => {modal.removeAttribute('open')} )
+            boton.addEventListener('click', () => {modal.setAttribute('open', 'true')} )
+        </script>
+    </form>
+
+    <script>
+        document.getElementById('nombre2').addEventListener('keyup', e => {document.getElementById('nom').innerHTML=""})
+    </script>
+
+    <script type="text/javascript">
+        function isValidDate(day,month,year){
+            var dteDate;
+    
+            month=month-1;
+            dteDate=new Date(year,month,day);
+     
+            return ((day==dteDate.getDate()) && (month==dteDate.getMonth()) && (year==dteDate.getFullYear()));
+        }
+     
+        function validate_fecha(fecha){
+            var patron=new RegExp("^(19|20)+([0-9]{2})([-])([0-9]{1,2})([-])([0-9]{1,2})$");
+     
+            if(fecha.search(patron)==0){
+                var values=fecha.split("-");
+                if(isValidDate(values[2],values[1],values[0])){
+                    return true;
+                }
+            }
+            return false;
+        }
+     
+        function calcularEdad(){
+            var fecha=document.getElementById("fecha2").value;
+            if(validate_fecha(fecha)==true){
+
+                var values=fecha.split("-");
+                var dia = values[2];
+                var mes = values[1];
+                var ano = values[0];
+     
+        
+                var fecha_hoy = new Date();
+                var ahora_ano = fecha_hoy.getYear();
+                var ahora_mes = fecha_hoy.getMonth()+1;
+                var ahora_dia = fecha_hoy.getDate();
+     
+            
+                var edad = (ahora_ano + 1900) - ano;
+                if ( ahora_mes < mes ){
+                    edad--;
+                }
+                if ((mes == ahora_mes) && (ahora_dia < dia)){
+                    edad--;
+                }
+                if (edad > 1900){
+                    edad -= 1900;
+                }
+     
+                var meses=0;
+                if(ahora_mes>mes)
+                    meses=ahora_mes-mes;
+                if(ahora_mes<mes)
+                    meses=12-(mes-ahora_mes);
+                if(ahora_mes==mes && dia>ahora_dia)
+                    meses=11;
+     
+                var dias=0;
+                if(ahora_dia>dia)
+                    dias=ahora_dia-dia;
+                if(ahora_dia<dia){
+                    ultimoDiaMes=new Date(ahora_ano, ahora_mes, 0);
+                    dias=ultimoDiaMes.getDate()-(dia-ahora_dia);
+                }
+     
+                document.getElementById("tienes").innerHTML="TIENES "+edad+" AÑOS";
+            }else{
+                document.getElementById("tienes").innerHTML="FECHA INCORRECTA";
+            }
+
+            if((dia>=21&&mes==3)||(dia<=20&&mes==4))
+                document.getElementById("tu-signo").innerHTML="TU SIGNO ES ARIES"
+            if((dia>=24&&mes==9)||(dia<=23&&mes==10))
+                document.getElementById("tu-signo").innerHTML="TU SIGNO ES LIBRA"
+            if((dia>=21&&mes==4)||(dia<=21&&mes==5))
+                document.getElementById("tu-signo").innerHTML="TU SIGNO ES TAURO"
+            if((dia>=24&&mes==10)||(dia<=22&&mes==11))
+                document.getElementById("tu-signo").innerHTML="TU SIGNO ES ESCORPION"
+            if((dia>=22&&mes==5)||(dia<=21&&mes==6))
+                document.getElementById("tu-signo").innerHTML="TU SIGNO ES GEMINIS"
+            if((dia>=23&&mes==11)||(dia<=21&&mes==12))
+                document.getElementById("tu-signo").innerHTML="TU SIGNO ES SAGITARIO"
+            if((dia>=21&&mes==6)||(dia<=23&&mes==7))
+                document.getElementById("tu-signo").innerHTML="TU SIGNO ES CANCER"
+            if((dia>=22&&mes==12)||(dia<=20&&mes==1))
+                document.getElementById("tu-signo").innerHTML="TU SIGNO ES CAPRICORNIO"
+            if((dia>=24&&mes==7)||(dia<=23&&mes==8))
+                document.getElementById("tu-signo").innerHTML="TU SIGNO ES LEO"
+            if((dia>=21&&mes==1)||(dia<=19&&mes==2))
+                document.getElementById("tu-signo").innerHTML="TU SIGNO ES ACUARIO"
+            if((dia>=24&&mes==8)||(dia<=23&&mes==9))
+                document.getElementById("tu-signo").innerHTML="TU SIGNO ES VIRGO"
+            if((dia>=20&&mes==2)||(dia<=20&&mes==3))
+                document.getElementById("tu-signo").innerHTML="TU SIGNO ES PISCIS"
+        }
+    </script>
+</body>
+</html>
